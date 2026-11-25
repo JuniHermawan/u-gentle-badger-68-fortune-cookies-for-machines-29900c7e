@@ -139,10 +139,16 @@ def pick_line(candidates):
 
 
 def gate_ok(line):
-    """The sealed gate: UTF-8 text, 1-200 chars, not only whitespace."""
+    """The sealed gate: UTF-8 text, 1-200 chars, not only whitespace.
+
+    Plus the task's own shape: the entry is a single line, so a line
+    break anywhere in it fails the gate too.
+    """
     if not line or not line.strip():
         return False
     if len(line) > MAX_CHARS:
+        return False
+    if "\n" in line or "\r" in line:
         return False
     try:
         line.encode("utf-8")
